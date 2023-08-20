@@ -1,4 +1,4 @@
-name: Document Generator
+name: Documents Generator
 on:
   push:
     branches:
