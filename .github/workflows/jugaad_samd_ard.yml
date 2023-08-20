@@ -42,3 +42,14 @@ jobs:
           echo "BUILD=${BUILD}" >> "$GITHUB_ENV"
           echo "ARCHIVE=${ARCHIVE}" >> "$GITHUB_OUTPUT"
           echo "ARCHIVE=${ARCHIVE}" >> "$GITHUB_ENV"
+
+      - name: Print the Environment
+        run: |
+          echo " TAG_NAME         = ${TAG_NAME}"
+          echo " BUILD_NAME       = ${BUILD_NAME}"
+          echo " PACKAGE_TEMPLATE = ${PACKAGE_TEMPLATE}"
+          echo " PACKAGE_INDEX    = ${PACKAGE_INDEX}"
+          echo " PACKAGE_NAME     = ${PACKAGE_NAME}"
+          echo " MIXIN_DIR        = ${MIXIN_DIR}"
+          echo " BUILD            = ${BUILD}"
+          echo " ARCHIVE          = ${ARCHIVE}"
