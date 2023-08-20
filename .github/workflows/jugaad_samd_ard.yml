@@ -146,7 +146,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: ${{ steps.penv.outputs.TAG_NAME }}
           name: Release ${{ steps.penv.outputs.TAG_NAME }}
-          draft: true
+          draft: false
           files: |
             LICENSE.txt
             artifacts/*.tar.bz2
