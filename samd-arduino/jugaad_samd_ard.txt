@@ -1,0 +1,62 @@
+{
+"packages": [
+  {
+    "name": "jugaad_samd_ard",
+    "maintainer": "Abhijit Bose",
+    "websiteURL": "https://github.com/0x3508A",
+    "email": "gmail at: 0x3508a",
+    "help": {
+      "online": "https://github.com/0x3508A/jugaad-boards"
+    },
+    "platforms": [
+      {
+        "name": "Jugaad SAMD Boards ( with Arduino SAMD Core )",
+        "architecture": "samd",
+        "version": "%%VERSION%%",
+        "category": "Contributed",
+        "url": "https://github.com/0x3508A/jugaad-boards/releases/download/%%RELEASE%%/%%FILENAME%%",
+        "archiveFileName": "%%FILENAME%%",
+        "checksum": "SHA-256:%%CHECKSUM%%",
+        "size": "%%SIZE%%",
+        "boards": [
+          { "name": "mcu-jugaad SAMD21G V1" },
+          { "name": "Anuj v0.4 SAM21G"}
+        ],
+        "toolsDependencies": [
+          {
+            "packager": "arduino",
+            "name": "arm-none-eabi-gcc",
+            "version": "7-2017q4"
+          },
+          {
+            "packager": "arduino",
+            "name": "bossac",
+            "version": "1.7.0-arduino3"
+          },
+          {
+            "packager": "arduino",
+            "name": "openocd",
+            "version": "0.10.0-arduino7"
+          },
+          {
+            "packager": "arduino",
+            "name": "CMSIS",
+            "version": "4.5.0"
+          },
+          {
+            "packager": "arduino",
+            "name": "CMSIS-Atmel",
+            "version": "1.2.0"
+          },
+          {
+            "packager": "arduino",
+            "name": "arduinoOTA",
+            "version": "1.2.1"
+          }
+        ]
+      }
+    ],
+    "tools": []
+  }
+]
+}
