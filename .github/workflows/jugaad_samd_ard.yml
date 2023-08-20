@@ -59,19 +59,19 @@ jobs:
         with:
           repository: arduino/ArduinoCore-samd
           path: ${{ steps.penv.outputs.BUILD }}
-      
+
       - name: Get to the Latest SAMD Core version
         run: |
           cd "${BUILD}"
           git fetch --tags
           git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
-      
+
       - name: Checkout ArduinoCore-API
         uses: actions/checkout@v3
         with:
           repository: arduino/ArduinoCore-API
           path: ArduinoCore-API
-      
+
       - name: Get to the Latest API Core version & Copy to SAMD Core
         run: |
           cd ArduinoCore-API
@@ -80,7 +80,7 @@ jobs:
           mv api "../${BUILD}/cores/arduino/"
           cd ..
           rm -rf ArduinoCore-API
-      
+
       - name: Prepare for Mixin
         run: |
           cd "${BUILD}"
@@ -90,7 +90,7 @@ jobs:
           rm LICENSE
           cd ..
           cp -arT "$MIXIN_DIR" "${BUILD}/"
-      
+
       - name: Create Archive
         id: arch
         run: |
@@ -103,4 +103,50 @@ jobs:
           echo "CHKSUM=${CHKSUM}" >> "$GITHUB_OUTPUT"
           echo "SIZE=${SIZE}" >> "$GITHUB_ENV"
           echo "SIZE=${SIZE}" >> "$GITHUB_OUTPUT"
+          echo
+          echo "   --- Checksum for ${ARCHIVE} = ${CHKSUM}"
+          echo "   --- Size for ${ARCHIVE}     = ${SIZE} bytes"
+          echo
 
+      - name: Prepare artifacts
+        run: |
+          mkdir artifacts
+          mv "${ARCHIVE}" artifacts/
+          rm -rf "${BUILD}"
+          cat "${PACKAGE_TEMPLATE}" |
+          sed "s/%%VERSION%%/${TAG_NAME}/" |
+          sed "s/%%FILENAME%%/${ARCHIVE}/" |
+          sed "s/%%CHECKSUM%%/${CHKSUM}/" |
+          sed "s/%%RELEASE%%/${TAG_NAME}/" |
+          sed "s/%%SIZE%%/${SIZE}/" > input.json
+          jq -r --argjson inf "$(jq '.packages[0].platforms[0]' input.json)" \
+            '.packages[${{ steps.penv.outputs.PACKAGE_INDEX }}].platforms += [$inf]' \
+            "${PACKAGE_NAME}" | tee new.json
+          mv new.json "${PACKAGE_NAME}"
+          cp *.json artifacts/
+          rm input.json
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: Archive
+          path: ${{ github.workspace }}/artifacts/**/*
+          retention-days: 5
+
+      - name: Commit the Changed Package File
+        run: |
+          git config --global user.name 'Github Actions'
+          git config --global user.email ''
+          git commit -am "Automated Package File"
+          git push origin HEAD:main
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.penv.outputs.TAG_NAME }}
+          name: Release ${{ steps.penv.outputs.TAG_NAME }}
+          draft: true
+          files: |
+            LICENSE.txt
+            artifacts/*.tar.bz2
