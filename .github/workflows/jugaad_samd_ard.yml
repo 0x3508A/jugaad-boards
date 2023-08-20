@@ -53,3 +53,54 @@ jobs:
           echo " MIXIN_DIR        = ${MIXIN_DIR}"
           echo " BUILD            = ${BUILD}"
           echo " ARCHIVE          = ${ARCHIVE}"
+
+      - name: Get Arduino SAMD Core
+        uses: actions/checkout@v3
+        with:
+          repository: arduino/ArduinoCore-samd
+          path: ${{ steps.penv.outputs.BUILD }}
+      
+      - name: Get to the Latest SAMD Core version
+        run: |
+          cd "${BUILD}"
+          git fetch --tags
+          git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+      
+      - name: Checkout ArduinoCore-API
+        uses: actions/checkout@v3
+        with:
+          repository: arduino/ArduinoCore-API
+          path: ArduinoCore-API
+      
+      - name: Get to the Latest API Core version & Copy to SAMD Core
+        run: |
+          cd ArduinoCore-API
+          git fetch --tags
+          git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
+          mv api "../${BUILD}/cores/arduino/"
+          cd ..
+          rm -rf ArduinoCore-API
+      
+      - name: Prepare for Mixin
+        run: |
+          cd "${BUILD}"
+          rm -rf .git*
+          rm -rf bootloaders/
+          rm -rf variants/
+          rm LICENSE
+          cd ..
+          cp -arT "$MIXIN_DIR" "${BUILD}/"
+      
+      - name: Create Archive
+        id: arch
+        run: |
+          tar --exclude=extras/** --exclude=.git* --exclude=.idea \
+            -cjf "${ARCHIVE}" "${BUILD}"
+          CHKSUM=$(sha256sum "${ARCHIVE}" | awk '{ print $1 }')
+          SIZE=$(wc -c "${ARCHIVE}" | awk '{ print $1 }')
+          # Export Variables
+          echo "CHKSUM=${CHKSUM}" >> "$GITHUB_ENV"
+          echo "CHKSUM=${CHKSUM}" >> "$GITHUB_OUTPUT"
+          echo "SIZE=${SIZE}" >> "$GITHUB_ENV"
+          echo "SIZE=${SIZE}" >> "$GITHUB_OUTPUT"
+
