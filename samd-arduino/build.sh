@@ -4,18 +4,23 @@
 set -e
 set +x
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-export BUILD='jugaad_samd_ard'
-export PACKAGE_TEMPLATE='jugaad_samd_ard.txt'
-export PACKAGE_INDEX=0
-export PACKAGE_NAME="${SCRIPT_DIR}/../package_jugaad-boards_index.json"
-export MIXIN_DIR="${SCRIPT_DIR}/mixin"
+BUILD_NAME='jugaad_samd_ard'
+PACKAGE_TEMPLATE='jugaad_samd_ard.txt'
+PACKAGE_INDEX=0
+PACKAGE_NAME='package_jugaad-boards_index.json'
+PACKAGE_FILE="${SCRIPT_DIR}/../${PACKAGE_NAME}"
+MIXIN_DIR="mixin"
 # Internal Vars
-FORCE_CLEANUP=1
+FORCE_CLEANUP=0
 
 # Set Dummy Tag name
 if [[ ! -v TAG_NAME ]]; then 
 	TAG_NAME="$(date +"%Y%m%d.%H.%M")"
 fi
+BUILD="${BUILD_NAME}-${TAG_NAME}"
+ARCIVE_NAME_FILE="${BUILD}/extras/ARCHIVE.txt"
+BUILD_VERSION_FILE="${BUILD}/BUILD-VERSION.txt"
+PACKAGE_STAGING="package_${BUILD_NAME}_index.json"
 
 # Print all variables
 echo
@@ -102,3 +107,113 @@ if [ ! -e "ArduinoCore-samd/cores/arduino/api" ]; then
 	echo
 	rm -rf ArduinoCore-API
 fi
+
+# Add Mixin
+echo
+echo " -- Prepare to Mixin"
+echo
+echo
+echo "   --- Create the new ${BUILD} directory"
+echo
+mkdir "${BUILD}"
+echo
+echo "   --- Copy the SAMD Core"
+echo
+cp -arT ArduinoCore-samd "${BUILD}/"
+echo
+echo "   --- Cleanup Variants and Bootloaders"
+echo
+rm -rf "${BUILD}/variants/"
+rm -rf "${BUILD}/bootloaders/"
+rm -rf "${BUILD}/LICENSE"
+echo
+echo "   --- Copy the Mixin directory"
+echo
+cp -arT mixin "${BUILD}/"
+echo
+echo "   --- Recipi is ready to prepare"
+echo
+ARCHIVE="${BUILD}.tar.bz2"
+echo "$ARCHIVE" > "${ARCIVE_NAME_FILE}"
+echo "${TAG_NAME}" > "${BUILD_VERSION_FILE}"
+
+# Create the Archive
+echo
+echo " -- Create the Archive ${ARCHIVE}"
+echo
+echo
+echo "   --- Tar the archive"
+echo
+tar --exclude=extras/** --exclude=.git* --exclude=.idea \
+	-cjf "${ARCHIVE}" "${BUILD}"
+echo
+echo "   --- Cleanup the Build"
+echo
+rm -rf "${BUILD}"
+echo
+echo "   --- Prepare the Sum and Size of the Archive"
+echo
+CHKSUM=$(sha256sum "${ARCHIVE}" | awk '{ print $1 }')
+SIZE=$(wc -c "${ARCHIVE}" | awk '{ print $1 }')
+echo
+echo "   --- Checksum for ${ARCHIVE} = ${CHKSUM}"
+echo "   --- Size for ${ARCHIVE}     = ${SIZE} bytes"
+echo
+
+# Create the Temporary Package Template
+echo
+echo " -- Create the Temporary Package Template"
+echo
+echo
+echo "   --- prepare 'input.json' using ${PACKAGE_TEMPLATE}"
+echo
+sed "s/%%VERSION%%/${TAG_NAME}/" "${PACKAGE_TEMPLATE}"|
+sed "s/%%FILENAME%%/${ARCHIVE}/" |
+sed "s/%%CHECKSUM%%/${CHKSUM}/" |
+sed "s/%%RELEASE%%/${TAG_NAME}/" |
+sed "s/%%SIZE%%/${SIZE}/" > input.json
+echo
+echo "   --- Create the actual ${PACKAGE_NAME}"
+echo
+jq -r --argjson inf "$(jq '.packages[0].platforms[0]' input.json)" \
+	'.packages[0].platforms += [$inf]' \
+	"${PACKAGE_FILE}" | tee "${PACKAGE_NAME}"
+# echo
+# echo "   --- Create the Staging ${PACKAGE_STAGING}"
+# echo
+# if [ "$OS" == "Windows_NT" ];then
+# NEW_URL="file://$(realpath "${PWD}/../artifacts" | sed 's/^\/\(.\)/\/\1:/' | cut -c 2-)/${ARCHIVE}"
+# else
+# NEW_URL="file:///${PWD}/../artifacts/${ARCHIVE}"
+# fi
+# echo
+# echo "   --- New URL (Staging) = ${NEW_URL}"
+# echo
+# echo
+# echo "   --- Staging File output"
+# echo
+# jq --argjson inp "\"${NEW_URL}\"" \
+# 	'.packages[0].platforms[0].url = $inp' \
+# 	input.json | tee "${PACKAGE_STAGING}"
+echo
+echo "   --- Clean-up the pre-cursor"
+echo
+rm input.json
+
+# Prepare Artifact
+echo
+echo " -- Prepare Artifacts"
+echo
+if [ ! -e "../artifacts" ]; then
+	mkdir ../artifacts
+fi
+echo
+echo "   --- Move things to Artifacts folder"
+echo
+mv ./*.tar.bz2 ../artifacts/
+mv ./*.json ../artifacts/
+# End
+echo
+echo
+#echo "Press Enter to exit...."
+#read

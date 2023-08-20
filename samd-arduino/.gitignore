@@ -1,3 +1,5 @@
 ArduinoCore-API/
-jugaad_samd_ard/
+jugaad_samd_ard*/
 ArduinoCore-samd/
+*.tar.bz2
+*.json
