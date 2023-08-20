@@ -50,3 +50,4 @@ bootloaders/*/build/
 build/
 artifact*/
 template.txt
+jugaad_samd_ard*/

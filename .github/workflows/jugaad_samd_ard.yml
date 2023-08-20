@@ -1,7 +1,12 @@
-name: 'Build jugaad_samd_ard'
+name: "Build jugaad_samd_ard"
 
 env:
   TAG_NAME: ${{ github.ref_name }}
+  BUILD_NAME: "jugaad_samd_ard"
+  PACKAGE_TEMPLATE: "samd-arduino/jugaad_samd_ard.txt"
+  PACKAGE_INDEX: 0
+  PACKAGE_NAME: "package_jugaad-boards_index.json"
+  MIXIN_DIR: "samd-arduino/mixin"
 
 ## Trigger
 on:
@@ -19,14 +24,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Run Build script
+      - name: Prepare Environment Variables
+        id: penv
         run: |
-          cd samd-arduino
-          ./build.sh
-
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: Archive
-          path: ${{ github.workspace }}/artifacts/**/*
-          retention-days: 5
+          # Send current variables as output
+          echo "TAG_NAME=${TAG_NAME}" >> "$GITHUB_OUTPUT"
+          echo "BUILD_NAME=${BUILD_NAME}" >> "$GITHUB_OUTPUT"
+          echo "PACKAGE_TEMPLATE=${PACKAGE_TEMPLATE}" >> "$GITHUB_OUTPUT"
+          echo "PACKAGE_INDEX=${PACKAGE_INDEX}" >> "$GITHUB_OUTPUT"
+          echo "PACKAGE_NAME=${PACKAGE_NAME}" >> "$GITHUB_OUTPUT"
+          echo "MIXIN_DIR=${MIXIN_DIR}" >> "$GITHUB_OUTPUT"
+          # Create More Variables
+          BUILD="${BUILD_NAME}-${TAG_NAME}"
+          ARCHIVE="${BUILD}.tar.bz2"
+          # Set Them to output and ENV file
+          echo "BUILD=${BUILD}" >> "$GITHUB_OUTPUT"
+          echo "BUILD=${BUILD}" >> "$GITHUB_ENV"
+          echo "ARCHIVE=${ARCHIVE}" >> "$GITHUB_OUTPUT"
+          echo "ARCHIVE=${ARCHIVE}" >> "$GITHUB_ENV"
