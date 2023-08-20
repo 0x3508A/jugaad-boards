@@ -30,15 +30,15 @@
 # Mountain View, CA 94042, USA.
 
 #
-# Juggad SAMD based on Arduino SAMD Core and platform.
+# Jugaad SAMD Boards ( with Arduino SAMD Core ).
 #
 # For more info:
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
 # https://arduino.github.io/arduino-cli/0.33/platform-specification/
 #
 
-name=Juggad SAMD (32-bits ARM Cortex-M0+) Boards
-version=2023-08-18-01-Core-1.8.13
+name=Jugaad SAMD Boards ( with Arduino SAMD Core )
+version=%%VERSION%%
 
 # Compile variables
 # -----------------
