@@ -1,5 +1,5 @@
 ArduinoCore-API/
 jugaad_samd_ard*/
 ArduinoCore-samd/
-*.tar.bz2
-*.json
+0x3508-JugaadSamdArd*/
+*.temp.json

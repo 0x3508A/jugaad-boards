@@ -41,7 +41,6 @@ env.bak/
 venv.bak/
 
 # Others
-*.bz2
 *.size
 *.sha256
 *.sha512
