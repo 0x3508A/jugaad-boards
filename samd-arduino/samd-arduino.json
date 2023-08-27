@@ -1,5 +1,5 @@
 {
-  "name": "Jugaad SAMD Boards ( with Arduino SAMD Core )",
+  "name": "0x3508a Jugaad SAMD Boards ( with Arduino SAMD Core )",
   "architecture": "samd",
   "version": "%%VERSION%%",
   "category": "Contributed",

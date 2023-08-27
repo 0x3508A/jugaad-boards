@@ -10,17 +10,17 @@
       },
       "platforms": [
         {
-          "name": "Jugaad SAMD Boards ( with Arduino SAMD Core )",
+          "name": "0x3508a Jugaad SAMD Boards ( with Arduino SAMD Core )",
           "architecture": "samd",
           "version": "0.0.0",
           "category": "Contributed",
           "help": {
             "online": "https://github.com/0x3508A/jugaad-boards"
           },
-          "url": "https://github.com/0x3508A/jugaad-boards/raw/testing/samd-arduino/0x3508-JugaadSamdArd-0.0.0.tar.bz2",
-          "archiveFileName": "0x3508-JugaadSamdArd-0.0.0.tar.bz2",
-          "checksum": "SHA-256:18304f3830340e14946022ec1b809084503f99c8d108db736349c2ee7d4f9c2e",
-          "size": "449352",
+          "url": "https://github.com/0x3508A/jugaad-boards/raw/testing/samd-arduino/0x3508a-JugaadSamdArd-0.0.0.tar.bz2",
+          "archiveFileName": "0x3508a-JugaadSamdArd-0.0.0.tar.bz2",
+          "checksum": "SHA-256:5d0d21556c816e7238a8f6fe7a23dc37edc6bcc19703706672b10ea3a8f8b901",
+          "size": "449231",
           "boards": [
             {
               "name": "mcu-jugaad SAMD21G V1"

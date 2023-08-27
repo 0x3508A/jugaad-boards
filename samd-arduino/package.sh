@@ -22,7 +22,7 @@ set -e
 set +x
 # Initial Var
 SCRIPT_DIR="$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-BUILD_NAME='0x3508-JugaadSamdArd'
+BUILD_NAME='0x3508a-JugaadSamdArd'
 TEMPLATE='samd-arduino.json'
 PACKAGE_NAME='package_0x3508a_index.json'
 INTERJSON="${TEMPLATE}.temp.json"
