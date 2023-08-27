@@ -164,6 +164,7 @@ createpackagejson() {
 		rm -rf "${OUTPUT_FILE}"
 	fi
 	echo
+	# packages[0] For 0x3508a-JugaadSamdArd
 	jq -r --argjson inf "$(jq '.' "${INTERJSON_FILE}")" \
 	'.packages[0].platforms += [$inf]' \
 	"${PACKAGE_FILE}" > "${OUTPUT_FILE}" && \

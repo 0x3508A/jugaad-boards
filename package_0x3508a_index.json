@@ -1,7 +1,18 @@
 {
 	"packages": [
 		{
-			"name": "0x3508a",
+			"name": "0x3508a-JugaadSamdArd",
+			"maintainer": "Abhijit Bose",
+			"websiteURL": "https://0x3508a.github.io/jugaad-boards/",
+			"email": "gmail at: 0x3508a",
+			"help": {
+				"online": "https://github.com/0x3508A/jugaad-boards"
+			},
+			"platforms": [],
+			"tools": []
+		},
+		{
+			"name": "0x3508a-JugaadSamdAda",
 			"maintainer": "Abhijit Bose",
 			"websiteURL": "https://0x3508a.github.io/jugaad-boards/",
 			"email": "gmail at: 0x3508a",
