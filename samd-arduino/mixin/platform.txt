@@ -30,14 +30,14 @@
 # Mountain View, CA 94042, USA.
 
 #
-# Jugaad SAMD Boards ( with Arduino SAMD Core ).
+# 0x3508a Jugaad SAMD Boards ( with Arduino SAMD Core ).
 #
 # For more info:
 # https://github.com/arduino/Arduino/wiki/Arduino-IDE-1.5---3rd-party-Hardware-specification
 # https://arduino.github.io/arduino-cli/0.33/platform-specification/
 #
 
-name=Jugaad SAMD Boards ( with Arduino SAMD Core )
+name=0x3508a Jugaad SAMD Boards ( with Arduino SAMD Core )
 version=%%VERSION%%
 
 # Compile variables

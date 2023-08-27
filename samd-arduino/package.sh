@@ -31,7 +31,7 @@ BUILD="${BUILD_NAME}-${VERSION}"
 ARCHIVE_NAME="${BUILD}.tar.bz2"
 ARCHIVE_PATH="https://github.com/0x3508A/jugaad-boards/raw/main/"
 # Indicate Change due to Testing now Enableded
-if [ "$TESTING" == "true" ];then
+if [ "$(git rev-parse --abbrev-ref HEAD)" == "testing" ];then
 ARCHIVE_PATH="https://github.com/0x3508A/jugaad-boards/raw/testing/samd-arduino/"
 fi
 ARCHIVE_URL="${ARCHIVE_PATH}${ARCHIVE_NAME}"

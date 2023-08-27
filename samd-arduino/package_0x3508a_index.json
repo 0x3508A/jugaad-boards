@@ -19,8 +19,8 @@
           },
           "url": "https://github.com/0x3508A/jugaad-boards/raw/testing/samd-arduino/0x3508a-JugaadSamdArd-0.0.0.tar.bz2",
           "archiveFileName": "0x3508a-JugaadSamdArd-0.0.0.tar.bz2",
-          "checksum": "SHA-256:3a63f03607275b9668a32472e52953c56076007e43be5f4dbeb7658f2c016d4e",
-          "size": "449048",
+          "checksum": "SHA-256:740d706b631e006f0fc2a59db8689b05b06fad59f3255beb6067a8f7dd37b480",
+          "size": "449133",
           "boards": [
             {
               "name": "mcu-jugaad SAMD21G V1"
